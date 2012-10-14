@@ -1090,6 +1090,7 @@ struct session {
 
 	struct timeval	 creation_time;
 	struct timeval	 activity_time;
+	struct timeval	 prev_activity_time;
 
 	u_int		 sx;
 	u_int		 sy;

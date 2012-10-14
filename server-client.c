@@ -353,6 +353,10 @@ server_client_handle_key(struct client *c, int key)
 	/* Update the activity timer. */
 	if (gettimeofday(&c->activity_time, NULL) != 0)
 		fatal("gettimeofday failed");
+
+	/* Save previous activity time for detection of prefix in pasted text. */
+	memcpy(&s->prev_activity_time, &s->activity_time, sizeof s->activity_time);
+
 	memcpy(&s->activity_time, &c->activity_time, sizeof s->activity_time);
 
 	w = c->session->curw->window;
@@ -395,6 +399,13 @@ server_client_handle_key(struct client *c, int key)
 		isprefix = 1;
 	else
 		isprefix = 0;
+
+	/* Treat prefix as a regular key when pasting is detected. */
+	if (isprefix) {
+		timersub(&s->activity_time, &s->prev_activity_time, &tv);
+		if (tv.tv_sec == 0 && tv.tv_usec < 1000)
+			isprefix = 0;
+	}
 
 	/* No previous prefix key. */
 	if (!(c->flags & CLIENT_PREFIX)) {
