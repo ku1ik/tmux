@@ -582,7 +582,7 @@ handle_key:
 		evtimer_del(&tty->key_timer);
 
 	if (key != KEYC_NONE)
-		server_client_handle_key(tty->client, key);
+		server_client_handle_key(tty->client, key, len);
 
 	tty->flags &= ~TTY_ESCAPE;
 	return (1);

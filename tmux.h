@@ -1845,7 +1845,7 @@ void	 server_update_socket(void);
 void	 server_add_accept(int);
 
 /* server-client.c */
-void	 server_client_handle_key(struct client *, int);
+void	 server_client_handle_key(struct client *, int, size_t);
 void	 server_client_create(int);
 int      server_client_open(struct client *, struct session *, char **);
 void	 server_client_lost(struct client *);

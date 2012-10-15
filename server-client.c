@@ -334,7 +334,7 @@ server_client_check_mouse(
 
 /* Handle data key input from client. */
 void
-server_client_handle_key(struct client *c, int key)
+server_client_handle_key(struct client *c, int key, size_t read_len)
 {
 	struct session		*s;
 	struct window		*w;
@@ -394,6 +394,10 @@ server_client_handle_key(struct client *c, int key)
 	else if (key == options_get_number(&c->session->options, "prefix2"))
 		isprefix = 1;
 	else
+		isprefix = 0;
+
+	/* Treat prefix as a regular key when pasting is detected. */
+	if (isprefix && read_len > 1)
 		isprefix = 0;
 
 	/* No previous prefix key. */
